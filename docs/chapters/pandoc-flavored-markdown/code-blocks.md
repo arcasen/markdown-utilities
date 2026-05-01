@@ -153,3 +153,56 @@ pandoc --highlight-style my.theme
 
 :::
 
+
+#### 关于 \LaTeX 代码渲染
+
+pandoc 处理后的 tex 代码时显示 `lauange=TeX` 而非  `lauange=[LaTeX]TeX`，而前者不支持一些命令渲染，如`\begin`。
+
+Pandoc 默认的 LaTeX 写入器（Writer）确实会将代码块标记为 `language=TeX`，但在 `listings` 宏包中，`[LaTeX]TeX` 才是专门针对 \LaTeXe 语法定制的方言（包含更多的现代命令支持）。
+
+为什么 Pandoc 默认只给 `TeX`？
+Pandoc 的设计哲学是**通用性**。在它的内部定义中，`tex` 语言标签对应的是基础的 TeX 语法。而 `listings` 宏包是一个高度可定制的 LaTeX 插件，它通过 `[dialect]language` 这种非标准语法来区分。Pandoc 的内置模板通常不会为了某个宏包的特殊语法而改变其通用的标签系统。
+
+要解决这个问题，你有两种主要的方案：**全局映射** 或 **局部修改**。
+
+1. **方案一：在导言区强制映射**
+
+你不需要去修改 Pandoc 的生成逻辑，只需要在你的 Markdown 开头（YAML 元数据）中告诉 `listings` 宏包：**当看到 `TeX` 时，请按照 `[LaTeX]TeX` 的规则来处理。**
+
+在 YAML 中添加以下代码：
+
+```yaml
+---
+header-includes:
+  - |
+    \usepackage{listings}
+    \lstset{
+      defaultdialect=[LaTeX]TeX,
+      language=[LaTeX]TeX,
+      % 在这里添加你其他的 listings 样式
+      basicstyle=\ttfamily,
+      keywordstyle=\color{blue}
+    }
+---
+
+```
+
+**原理**：`defaultdialect=[LaTeX]TeX` 会强制让所有的 TeX 代码块默认使用 LaTeX 方言。
+
+2. **方案二：使用 Pandoc 过滤器**
+
+如果你希望生成的 `.tex` 源码文件里清清楚楚地写着 `language=[LaTeX]TeX`，你可以利用 Pandoc 的 **Fenced Code Attributes** 功能。
+
+在 Markdown 中这样写：
+
+````markdown
+```{[LaTeX]TeX}
+\documentclass{article}
+\begin{document}
+  Hello
+\end{document}
+
+```
+````
+
+**但是注意**：有些版本的 Pandoc 会因为方括号 `[]` 产生解析歧义。如果上述写法报错，建议使用方案一，那是处理 Pandoc 转换逻辑最稳妥的方式。

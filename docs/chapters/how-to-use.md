@@ -54,7 +54,6 @@ bash install
 
 
 ::: important
-
 该文件包含语法的要求如下：
 
 - 文件包含指令必须单独成行；

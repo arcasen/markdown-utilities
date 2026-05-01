@@ -37,7 +37,8 @@ def action(elem, doc):
     if doc.format == 'latex' and isinstance(elem, pf.Link):
         # Check if the link is a section reference (starts with #sec:)
         # if elem.url.startswith('#sec:'):
-        if elem.url.startswith('#'):
+        # 排除掉 Pandoc 自动生成的文献引用链接（通常以 #ref- 开头）
+        if elem.url.startswith('#') and not elem.url.startswith('#ref-'):
             # Remove '#' and convert
             identifier = chinese_to_ux(elem.url[1:])
             pageref = pf.RawInline(
