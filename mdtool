@@ -13,7 +13,32 @@ import panflute as pf
 
 
 # 正则匹配：行首可选空格 + ![[ + 内容 + ]] + 可选空格 + 行尾
-markdown_include_pattern = re.compile(r'^(\s*)!\[\[([^]]+)\]\]\s*$')
+markdown_include_pattern = re.compile(
+    r'^(\s*)!\[\[\s*(?P<filepath>[^:\]]+?)\s*(?::\s*(?P<range>\d+(?:-\d*)?)\s*)?\]\]\s*$'
+)
+
+
+def parse_range(range_str):
+    """解析行号范围字符串，返回基于 0 的 (start, end) 索引切片。
+    
+    支持格式:
+    - None    -> 引入全量文件 (0, None)
+    - "10"    -> 仅第 10 行
+    - "10-20" -> 第 10 行到第 20 行 (闭区间)
+    - "10-"   -> 从第 10 行直到文件末尾
+    """
+    if not range_str:
+        return 0, None  # 从首行到文件末尾
+
+    if '-' in range_str:
+        start_part, end_part = range_str.split('-', 1)
+        start = int(start_part) - 1 if start_part else 0
+        end = int(end_part) if end_part else None  # None 表示到末尾
+        return start, end
+    else:
+        # 单行情况
+        start = int(range_str) - 1
+        return start, start + 1
 
 
 def process_expansion(filepath):
@@ -32,10 +57,19 @@ def process_expansion(filepath):
 
             if match:
                 indentation = match.group(1)
-                subdoc_path = match.group(2).strip()
+                subdoc_path = match.group('filepath').strip()
+                range_str = match.group('range')
+
+                start, end = parse_range(range_str)
 
                 with open(subdoc_path, 'r', encoding='utf-8') as subdoc:
-                    for include_line in subdoc:
+                    sub_lines = subdoc.readlines()
+
+                    # 确定切片的终止边界
+                    slice_end = end if end is not None else len(sub_lines)
+                    target_lines = sub_lines[start:slice_end]
+
+                    for include_line in target_lines:
                         print(f"{indentation}{include_line}", end="")
 
                 print("")  # 输出空行
@@ -73,7 +107,7 @@ def process_markdown_depends(dir):
                 for line in f:
                     match = markdown_include_pattern.match(line)
                     if match:
-                        subdoc_path = match.group(2).strip()  # 去除内容内首尾空格
+                        subdoc_path = match.group('filepath').strip()  # 去除内容内首尾空格
                         if subdoc_path and subdoc_path not in depends:
                             subdoc_path_norm = os.path.normpath(subdoc_path)
                             depends[subdoc_path_norm] = None
@@ -230,7 +264,7 @@ example:
         parser.add_argument(
             '-v', '--version',
             action='version',
-            version='%(prog)s 0.2.0'
+            version='%(prog)s 0.3.0'
         )
 
         subparsers = parser.add_subparsers(
