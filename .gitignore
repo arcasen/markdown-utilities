@@ -30,3 +30,6 @@ playground/
 *.listing *.mul
 
 *.err
+
+*.bak
+*.txt
