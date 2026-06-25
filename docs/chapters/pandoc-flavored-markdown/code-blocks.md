@@ -161,7 +161,7 @@ pandoc 处理后的 tex 代码时显示 `lauange=TeX` 而非  `lauange=[LaTeX]Te
 Pandoc 默认的 LaTeX 写入器（Writer）确实会将代码块标记为 `language=TeX`，但在 `listings` 宏包中，`[LaTeX]TeX` 才是专门针对 \LaTeXe 语法定制的方言（包含更多的现代命令支持）。
 
 为什么 Pandoc 默认只给 `TeX`？
-Pandoc 的设计哲学是**通用性**。在它的内部定义中，`tex` 语言标签对应的是基础的 TeX 语法。而 `listings` 宏包是一个高度可定制的 LaTeX 插件，它通过 `[dialect]language` 这种非标准语法来区分。Pandoc 的内置模板通常不会为了某个宏包的特殊语法而改变其通用的标签系统。
+Pandoc 的设计哲学是**通用性**。在它的内部定义中，`tex` 语言标签对应的是基础的 \TeX 语法。而 `listings` 宏包是一个高度可定制的 \LaTeX 插件，它通过 `[dialect]language` 这种非标准语法来区分。Pandoc 的内置模板通常不会为了某个宏包的特殊语法而改变其通用的标签系统。
 
 要解决这个问题，你有两种主要的方案：**全局映射** 或 **局部修改**。
 
@@ -187,7 +187,7 @@ header-includes:
 
 ```
 
-**原理**：`defaultdialect=[LaTeX]TeX` 会强制让所有的 TeX 代码块默认使用 LaTeX 方言。
+**原理**：`defaultdialect=[LaTeX]TeX` 会强制让所有的 \TeX 代码块默认使用 LaTeX 方言。
 
 2. **方案二：使用 Pandoc 过滤器**
 

@@ -1,5 +1,5 @@
 # Makefile for merging Markdown files and converting Markdown to PDF, HTML, TEX etc
-# Version: 20260228
+# Version: 20260625
 
 # Specify input and output directories
 DOCS ?= docs
@@ -93,8 +93,8 @@ $(DIST)/%: $(DOCS)/%
 	@mkdir -p $(dir $@)
 	@cp -rf $< $@
 
-# Rebasing paths of expandded images and markdowns
-# Caution: processing expandded images in both inline and reference form
+# Rebasing paths of nested images and markdowns
+# Caution: processing nested images in both inline and reference form
 #          - ![<alt-text>](<url> "<picture-title>")
 #          - ![<atl-text>][<picture-reference>]
 #            [<pciture-reference>]: <url> "<picture-title>"
