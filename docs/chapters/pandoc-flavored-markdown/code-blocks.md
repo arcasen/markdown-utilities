@@ -154,7 +154,9 @@ pandoc --highlight-style my.theme
 :::
 
 
-#### 关于 \LaTeX 代码渲染
+#### 关于 \texorpdfstring{\LaTeX}{LaTeX} 代码渲染
+
+<!--\LaTeX 宏包命令包含复杂的排版、字体和间距调整，PDF 阅读器无法直接在目录边栏中渲染这些排版样式-->
 
 pandoc 处理后的 tex 代码时显示 `lauange=TeX` 而非  `lauange=[LaTeX]TeX`，而前者不支持一些命令渲染，如`\begin`。
 

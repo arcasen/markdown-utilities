@@ -1,0 +1,13 @@
+\documentclass{ctexart} % 使用中文文档类
+\usepackage[unicode]{hyperref} % 必须开启 unicode
+
+\begin{document}
+
+\tableofcontents % 生成目录
+\newpage
+
+% 正确的写法
+\section{关于 \texorpdfstring{\LaTeX}{LaTeX} 的技术方案}
+正文会显示 \LaTeX{}。查看左侧 PDF 导航栏，书签应该显示为：“关于 LaTeX 的技术方案”。
+
+\end{document}

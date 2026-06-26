@@ -10,17 +10,45 @@ import shutil
 import os
 from collections import OrderedDict  # 用于保持插入顺序
 import panflute as pf
+from pathlib import Path
+from functools import reduce
 
+# 嵌套 Markdown 语法: 行首可选空格 + ![[ + 文件路径 + (: 范围) ]] + 可选空格 + 行尾
+nested_markdown_pattern = re.compile(
+    r'^(\s*)!\[\[\s*(?P<filepath>[^:\]]+?)\s*(?::\s*(?P<range>\d+(?:-\d*)?)\s*)?\]\]\s*$',
+    re.MULTILINE
+)
 
-# 正则匹配：行首可选空格 + ![[ + 内容 + ]] + 可选空格 + 行尾
-markdown_include_pattern = re.compile(
-    r'^(\s*)!\[\[\s*(?P<filepath>[^:\]]+?)\s*(?::\s*(?P<range>\d+(?:-\d*)?)\s*)?\]\]\s*$'
+# 标准 Inline 图片语法: ![alt] + ( + url + 可选标题 + )
+# ![<alt-text>](<url> "<picture-title>")
+# 在标准的 Markdown 规范（CommonMark）中，图片的 title（以及超链接的 title）确实有且只有三种合法的闭合形式：
+# 双引号("title") —— 最常用
+# 单引号('title')
+# 小括号((title))
+inline_image_pattern = re.compile(
+    r'\!\[(?P<alt>(?:\\[\[\]]|[^\[\]])*)\]'             # 允许 alt 中出现转义的中括号
+    r'\(\s*'
+    r'(?P<url>[^\s\)]+)'                                # URL 不能包含空格和右括号
+    r'(?:\s+(?P<title>"[^"]*"|\'[^\']*\'|\([^)]*\)))?'  # 严格成对的引号/括号
+    r'\s*\)',
+    re.MULTILINE
+)
+
+# 标准 Reference 图片定义: [ref_id]: + url(必须以指定图片格式结尾) + 可选标题
+# ![ < atl-text > ][ < picture-reference > ]
+# [<pciture-reference>]: <url> "<picture-title>"
+reference_image_pattern = re.compile(
+    r'\[(?P<ref>[^\]]+)\]\:\s*'                          # 匹配参考标识，如 [ref]:
+    # URL
+    r'(?P<url>\S+?\.(?:png|jpg|jpeg|gif|webp|svg))'      # 限定图片后缀（不分大小写）
+    r'(?:\s+(?P<title>"[^"]*"|\'[^\']*\'|\([^)]*\)))?',  # 严格成对的 title 形式
+    re.MULTILINE | re.IGNORECASE                         # 允许匹配大写后缀, 如 .PNG
 )
 
 
 def parse_range(range_str):
     """解析行号范围字符串，返回基于 0 的 (start, end) 索引切片。
-    
+
     支持格式:
     - None    -> 引入全量文件 (0, None)
     - "10"    -> 仅第 10 行
@@ -53,16 +81,19 @@ def process_expansion(filepath):
 
     with open(filepath, 'r', encoding='utf-8') as f:
         for line in f:
-            match = markdown_include_pattern.match(line)
+            match = nested_markdown_pattern.match(line)
 
             if match:
-                indentation = match.group(1)
+                indent_before = match.group(1)
                 subdoc_path = match.group('filepath').strip()
                 range_str = match.group('range')
 
                 start, end = parse_range(range_str)
 
-                with open(subdoc_path, 'r', encoding='utf-8') as subdoc:
+                # 注意: open 函数不能打开含 ~ 的路径
+                safe_path = os.path.expanduser(subdoc_path)
+
+                with open(safe_path, 'r', encoding='utf-8') as subdoc:
                     sub_lines = subdoc.readlines()
 
                     # 确定切片的终止边界
@@ -70,7 +101,7 @@ def process_expansion(filepath):
                     target_lines = sub_lines[start:slice_end]
 
                     for include_line in target_lines:
-                        print(f"{indentation}{include_line}", end="")
+                        print(f"{indent_before}{include_line}", end="")
 
                 print("")  # 输出空行
             else:
@@ -105,9 +136,10 @@ def process_markdown_depends(dir):
 
             with open(filepath, 'r', encoding='utf-8') as f:
                 for line in f:
-                    match = markdown_include_pattern.match(line)
+                    match = nested_markdown_pattern.match(line)
                     if match:
-                        subdoc_path = match.group('filepath').strip()  # 去除内容内首尾空格
+                        subdoc_path = match.group(
+                            'filepath').strip()  # 去除内容内首尾空格
                         if subdoc_path and subdoc_path not in depends:
                             subdoc_path_norm = os.path.normpath(subdoc_path)
                             depends[subdoc_path_norm] = None
@@ -243,6 +275,102 @@ def process_init(target_dir, article=False, overwrite=False):
             print(f"Copied: {src_file} -> {dst_file}")
 
 
+# 通过 Panflute 修改 pf.Image 元素的 url 后, AST（抽象语法树）在存储和导出
+# Markdown 时会将 ![[改写成 \!\[\[, 我们需要看一看 Markdown 的底层解析逻辑
+# 和 AST 的工作原理. 这是因为 ![[ 触犯了标准 Markdown 解析器的"语法安全防御机制".
+def rebase_path(filepath, dist_dir="."):
+    """Rebasing path of nested images and markdowns
+
+    Args:
+        filepath: str, Markdown document file path
+        dist_dir: str, new base directory name
+
+    Returns:
+        (stdout): processed document text
+    """
+
+    filepath = Path(filepath).expanduser().resolve()
+    dist_dir = Path(dist_dir).expanduser().resolve()
+
+    # 计算相对路径 (安全处理：先转绝对路径，避免 .. 或重复斜杠导致计算失败)
+    try:
+        file_dir = filepath.parent
+        rel_path = file_dir.relative_to(dist_dir)
+        rel_path_str = f"{rel_path}/" if str(rel_path) != "." else ""
+    except ValueError:
+        print(
+            f"Warning: '{filepath}' is NOT inside the directory '{dist_dir}'. Skip!")
+        return
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    # 匹配与替换逻辑
+    def rebase_nested_markdown(match):
+        # 提取前导空格（原正则的第一组）
+        indent_before = match.group(1) or ""
+
+        # 使用命名捕获组提取文件路径
+        img_path = match.group("filepath").strip()
+
+        # 如果是绝对路径或家目录开头，保持原样不替换
+        if Path(img_path).expanduser().is_absolute():
+            return match.group(0)
+
+        # 提取命名捕获组中的范围（如果存在的话，形如 ':10-20' 或 ':10'）
+        # 注意：原正则中包含了前面的冒号，所以我们需要提取完整的匹配文字
+        # 原正则末尾的 \s*$ 匹配了尾随空格，这里我们也需要保留
+        range_part = ""
+        # 检查整个可选的冒号+范围组是否匹配到了
+        # 因为整个可选组没有命名，它是第 3 个匿名组 (::\s*(?P<range>...)\s*)?
+        if match.group(3):
+            # 重新组装冒号和范围，或者直接用 match.group(3) 的原始文本
+            range_part = f":{match.group(3)}"
+
+        # 拼接新的相对路径
+        new_img_path = f"{rel_path_str}{img_path}"
+
+        # 组装最终结果：前导空格 + ![[ + 新路径 + 范围(若有) + ]] + 尾随（通过原正则末尾的 \s*$ 处理）
+        # 注意：由于原正则末尾是 \s*$，整个匹配项会吞掉行尾的空格，所以在这里不需要额外加 \n
+        return f"{indent_before}![[{new_img_path}{range_part}]]"
+
+    def rebase_inline_image(match):
+        img_alt = match.group("alt")
+        img_url = match.group("url")
+        img_title = match.group("title") or ""
+
+        if img_url.startswith(('http://', 'https://', 'ftp://', '/', '~')):
+            return match.group(0)  # 返回匹配到的整行，保持原样
+
+        # 返回拼接新的相对路径
+        return f"![{img_alt}]({rel_path_str}{img_url} {img_title})"
+
+    def rebase_reference_image(match):
+        img_ref = match.group("ref")
+        img_url = match.group("url")
+        img_title = match.group("title") or ""
+
+        if img_url.startswith(('http://', 'https://', 'ftp://', '/', '~')):
+            return match.group(0)  # 返回匹配到的整行，保持原样
+
+        # 返回拼接新的相对路径
+        return f"[{img_ref}]:{rel_path_str}{img_url} {img_title}"
+
+    # 类似于链式调用
+    rules = [
+        (nested_markdown_pattern, rebase_nested_markdown),
+        (inline_image_pattern, rebase_inline_image),
+        (reference_image_pattern, rebase_reference_image),
+    ]
+
+    updated_content = reduce(
+        lambda t, rule: rule[0].sub(rule[1], t), rules, content)
+
+    # 写回文件
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(updated_content)
+
+
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser(
@@ -256,6 +384,7 @@ example:
   mdtool init [target_dir] -a  # create an article
   mdtool depend input.md 
   mdtool expand input.md
+  mdtool rebase input.md -d dir # rebase paths of nested images and markdowns
 """
         )
 
@@ -264,7 +393,7 @@ example:
         parser.add_argument(
             '-v', '--version',
             action='version',
-            version='%(prog)s 0.3.0'
+            version='%(prog)s 0.4.0'
         )
 
         subparsers = parser.add_subparsers(
@@ -312,6 +441,22 @@ example:
         p_e.add_argument("file", help=".markdown file to be processed")
 
         p_e.set_defaults(func=lambda args: process_expansion(args.file))
+
+        # ------------------- init (-i) -------------------
+        p_r = subparsers.add_parser(
+            "rebase",
+            aliases=["r"],
+            help="rebase paths of nested images and markdowns"
+        )
+
+        p_r.add_argument("file", help=".markdown file to be processed")
+        p_r.add_argument('-d', '--dist',
+                         type=Path,
+                         default=Path('.'),  # 默认是当前目录
+                         help="dist directory"
+                         )
+
+        p_r.set_defaults(func=lambda args: rebase_path(args.file, args.dist))
 
         # 解析并执行
         args = parser.parse_args()

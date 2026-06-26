@@ -1,0 +1,14 @@
+\documentclass{article}
+\usepackage{hyperref}
+
+\begin{document}
+\tableofcontents % 生成目录
+
+% 正确用法
+\section{\texorpdfstring{\LaTeX}{LaTeX} 使用指南}
+% 在PDF书签中会显示为 "LaTeX 使用指南"
+
+% 错误用法（书签会出错）
+% \section{\LaTeX 使用指南}
+
+\end{document}
