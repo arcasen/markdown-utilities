@@ -8,7 +8,7 @@ import re
 import sys
 import shutil
 import os
-from collections import OrderedDict  # 用于保持插入顺序
+from collections import OrderedDict
 import panflute as pf
 from pathlib import Path
 from functools import reduce
@@ -21,7 +21,7 @@ nested_markdown_pattern = re.compile(
 
 # 标准 Inline 图片语法: ![alt] + ( + url + 可选标题 + )
 # ![<alt-text>](<url> "<picture-title>")
-# 在标准的 Markdown 规范（CommonMark）中，图片的 title（以及超链接的 title）确实有且只有三种合法的闭合形式：
+# 在标准的 Markdown 规范 (CommonMark)中, 图片的 title (以及超链接的 title)确实有且只有三种合法的闭合形式：
 # 双引号("title") —— 最常用
 # 单引号('title')
 # 小括号((title))
@@ -30,24 +30,23 @@ inline_image_pattern = re.compile(
     r'\(\s*'
     r'(?P<url>[^\s\)]+)'                                # URL 不能包含空格和右括号
     r'(?:\s+(?P<title>"[^"]*"|\'[^\']*\'|\([^)]*\)))?'  # 严格成对的引号/括号
-    r'\s*\)',
-    re.MULTILINE
+    r'\s*\)'
 )
 
 # 标准 Reference 图片定义: [ref_id]: + url(必须以指定图片格式结尾) + 可选标题
 # ![ < atl-text > ][ < picture-reference > ]
 # [<pciture-reference>]: <url> "<picture-title>"
 reference_image_pattern = re.compile(
-    r'\[(?P<ref>[^\]]+)\]\:\s*'                          # 匹配参考标识，如 [ref]:
+    r'\[(?P<ref>[^\]]+)\]\:\s*'                          # 匹配参考标识, 如 [ref]:
     # URL
-    r'(?P<url>\S+?\.(?:png|jpg|jpeg|gif|webp|svg))'      # 限定图片后缀（不分大小写）
+    r'(?P<url>\S+?\.(?:png|jpg|jpeg|gif|webp|svg))'      # 限定图片后缀 (不分大小写)
     r'(?:\s+(?P<title>"[^"]*"|\'[^\']*\'|\([^)]*\)))?',  # 严格成对的 title 形式
-    re.MULTILINE | re.IGNORECASE                         # 允许匹配大写后缀, 如 .PNG
+    re.IGNORECASE                                        # 允许匹配大写后缀, 如 .PNG
 )
 
 
 def parse_range(range_str):
-    """解析行号范围字符串，返回基于 0 的 (start, end) 索引切片。
+    """解析行号范围字符串, 返回基于 0 的 (start, end) 索引切片.
 
     支持格式:
     - None    -> 引入全量文件 (0, None)
@@ -129,9 +128,9 @@ def process_markdown_depends(dir):
 
             # 计算相对路径并转换为目标文件名：xxx.md
             rel_path = os.path.normpath(os.path.relpath(filepath, dir))
-            target = rel_path[:-9] + '.md'  # 去除 .markdown，添加 .md
+            target = rel_path[:-9] + '.md'  # 去除 .markdown, 添加 .md
 
-            # 收集唯一嵌入文件（保持第一次出现的顺序）
+            # 收集唯一嵌入文件, 并保持插入顺序
             depends = OrderedDict()
 
             with open(filepath, 'r', encoding='utf-8') as f:
@@ -160,15 +159,15 @@ def process_image_depends(dir):
 
     print("# Nested images")
 
-    # 排除网络图片（即 URL 形式的图片），只提取 本地文件路径的图片文件名，
-    # 你可以在判断 Image 元素的 url 时，先检测它是否为 本地路径
-    # （而非以 http: //、https: // 等开头的网络链接）
+    # 排除网络图片 (即 URL 形式的图片), 只提取 本地文件路径的图片文件名, 
+    # 你可以在判断 Image 元素的 url 时, 先检测它是否为 本地路径
+    #  (而非以 http: //、https: // 等开头的网络链接)
     URL_PATTERN = re.compile(r'^https?://|^//', re.IGNORECASE)
 
     # 查找所有图片元素
     def action(elem, doc):
         if isinstance(elem, pf.Image):
-            # 判断是否为本地路径（非网络 URL）
+            # 判断是否为本地路径 (非网络 URL)
             if (not URL_PATTERN.match(elem.url)):
                 # 注意：这里需要一种方式把数据传出去
                 url_norm = os.path.normpath(elem.url)
@@ -183,7 +182,7 @@ def process_image_depends(dir):
 
             # 计算相对路径并转换为目标文件名：xxx.md
             rel_path = os.path.normpath(os.path.relpath(filepath, dir))
-            target = rel_path[:-9] + '.md'  # 去除 .markdown，添加 .md
+            target = rel_path[:-9] + '.md'  # 去除 .markdown, 添加 .md
 
             # 直接读取文件并转换为 panflute 能够处理的 doc 对象
             with open(filepath, 'r', encoding='utf-8') as f:
@@ -197,7 +196,7 @@ def process_image_depends(dir):
                 doc.filepath = filepath
 
                 # 给 doc 对象临时挂载一个属性来存储结果
-                # 收集唯一嵌入文件（保持第一次出现的顺序）
+                # 收集唯一嵌入文件 (保持第一次出现的顺序)
                 doc.depends = OrderedDict()
 
                 # 对文档应用 action
@@ -248,7 +247,7 @@ def process_init(target_dir, article=False, overwrite=False):
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
 
-    for root, dirs, files in os.walk(source_dir):
+    for root, _, files in os.walk(source_dir):
         # 计算相对路径
         rel_path = os.path.relpath(root, source_dir)
         dst_path = target_dir if rel_path == '.' else os.path.join(
@@ -263,21 +262,21 @@ def process_init(target_dir, article=False, overwrite=False):
             dst_file = os.path.join(dst_path, file)
 
             if os.path.exists(dst_file) and not overwrite:
-                # 文件已存在，询问是否覆盖
+                # 文件已存在, 询问是否覆盖
                 response = input(
                     f"The file already exists: {dst_file}.\nDo you want to overwrite it? (y/N): ").strip().lower()
                 if response != 'y':
                     print(f"Skipped: {dst_file}")
                     continue
 
-            # 执行拷贝（保留元数据）
+            # 执行拷贝 (保留元数据)
             shutil.copy2(src_file, dst_file)
             print(f"Copied: {src_file} -> {dst_file}")
 
 
-# 通过 Panflute 修改 pf.Image 元素的 url 后, AST（抽象语法树）在存储和导出
-# Markdown 时会将 ![[改写成 \!\[\[, 我们需要看一看 Markdown 的底层解析逻辑
-# 和 AST 的工作原理. 这是因为 ![[ 触犯了标准 Markdown 解析器的"语法安全防御机制".
+# 通过 Panflute 修改 pf.Image 元素的 url 后, AST (抽象语法树)在存储和导出
+# Markdown 时会将 ![[ 改写成 \!\[\[, 我们需要看一看 Markdown 的底层解析逻辑
+# 和 AST 的工作原理. 这是因为 ![[ 触犯了标准 Markdown 解析器的 "语法安全防御机制".
 def rebase_path(filepath, dist_dir="."):
     """Rebasing path of nested images and markdowns
 
@@ -292,7 +291,7 @@ def rebase_path(filepath, dist_dir="."):
     filepath = Path(filepath).expanduser().resolve()
     dist_dir = Path(dist_dir).expanduser().resolve()
 
-    # 计算相对路径 (安全处理：先转绝对路径，避免 .. 或重复斜杠导致计算失败)
+    # 计算相对路径 (安全处理：先转绝对路径, 避免 .. 或重复斜杠导致计算失败)
     try:
         file_dir = filepath.parent
         rel_path = file_dir.relative_to(dist_dir)
@@ -307,32 +306,22 @@ def rebase_path(filepath, dist_dir="."):
 
     # 匹配与替换逻辑
     def rebase_nested_markdown(match):
-        # 提取前导空格（原正则的第一组）
+        # 提取前导空格 (原正则的第一组)
         indent_before = match.group(1) or ""
 
         # 使用命名捕获组提取文件路径
-        img_path = match.group("filepath").strip()
+        subdoc_path = match.group("filepath").strip()
 
-        # 如果是绝对路径或家目录开头，保持原样不替换
-        if Path(img_path).expanduser().is_absolute():
+        # 如果是绝对路径或家目录开头, 保持原样不替换
+        if Path(subdoc_path).expanduser().is_absolute():
             return match.group(0)
 
-        # 提取命名捕获组中的范围（如果存在的话，形如 ':10-20' 或 ':10'）
-        # 注意：原正则中包含了前面的冒号，所以我们需要提取完整的匹配文字
-        # 原正则末尾的 \s*$ 匹配了尾随空格，这里我们也需要保留
-        range_part = ""
-        # 检查整个可选的冒号+范围组是否匹配到了
-        # 因为整个可选组没有命名，它是第 3 个匿名组 (::\s*(?P<range>...)\s*)?
-        if match.group(3):
-            # 重新组装冒号和范围，或者直接用 match.group(3) 的原始文本
-            range_part = f":{match.group(3)}"
+        # 提取命名捕获组中的范围, 注意: 不包含前面的冒号
+        range_str = match.group("range")
+        range_part = f":{range_str}" if range_str else ""
 
-        # 拼接新的相对路径
-        new_img_path = f"{rel_path_str}{img_path}"
-
-        # 组装最终结果：前导空格 + ![[ + 新路径 + 范围(若有) + ]] + 尾随（通过原正则末尾的 \s*$ 处理）
-        # 注意：由于原正则末尾是 \s*$，整个匹配项会吞掉行尾的空格，所以在这里不需要额外加 \n
-        return f"{indent_before}![[{new_img_path}{range_part}]]"
+        # 注意：由于原正则末尾是 \s*$, 整个匹配项会吞掉行尾的空格, 所以在这里需要额外加 \n
+        return f"{indent_before}![[{rel_path_str}{subdoc_path}{range_part}]]\n"
 
     def rebase_inline_image(match):
         img_alt = match.group("alt")
@@ -340,9 +329,8 @@ def rebase_path(filepath, dist_dir="."):
         img_title = match.group("title") or ""
 
         if img_url.startswith(('http://', 'https://', 'ftp://', '/', '~')):
-            return match.group(0)  # 返回匹配到的整行，保持原样
+            return match.group(0)  # 返回匹配到的整行, 保持原样
 
-        # 返回拼接新的相对路径
         return f"![{img_alt}]({rel_path_str}{img_url} {img_title})"
 
     def rebase_reference_image(match):
@@ -351,9 +339,8 @@ def rebase_path(filepath, dist_dir="."):
         img_title = match.group("title") or ""
 
         if img_url.startswith(('http://', 'https://', 'ftp://', '/', '~')):
-            return match.group(0)  # 返回匹配到的整行，保持原样
+            return match.group(0)  # 返回匹配到的整行, 保持原样
 
-        # 返回拼接新的相对路径
         return f"[{img_ref}]:{rel_path_str}{img_url} {img_title}"
 
     # 类似于链式调用
@@ -389,7 +376,7 @@ example:
         )
 
         # 添加版本参数
-        # %(prog)s 是一个占位符，会自动替换为你的文件名
+        # %(prog)s 是一个占位符, 会自动替换为你的文件名
         parser.add_argument(
             '-v', '--version',
             action='version',
