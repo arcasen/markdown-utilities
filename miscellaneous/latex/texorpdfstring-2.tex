@@ -1,13 +1,37 @@
-\documentclass{ctexart} % 使用中文文档类
-\usepackage[unicode]{hyperref} % 必须开启 unicode
+\documentclass{article}
+\usepackage{ctex} % 支持中文
+\usepackage[unicode]{hyperref} % 启用书签的 Unicode 支持
+\usepackage{bookmark} % 配合 bookmark 宏包效果更佳
+
+% 全局拦截特定的宏
+% Enable the hyperref package to substitute the complex, typesetting-heavy 
+% \LaTeX logo with the plain text string 'LaTeX' when building PDF 
+% bookmarks and document properties, thereby preventing compilation 
+% errors and text distortion in the PDF viewer's navigation pane.
+\pdfstringdefDisableCommands{%
+  \def\LaTeX{LaTeX}%
+  \def\TeX{TeX}%
+  \def\alpha{alpha}
+}
 
 \begin{document}
 
 \tableofcontents % 生成目录
-\newpage
 
-% 正确的写法
-\section{关于 \texorpdfstring{\LaTeX}{LaTeX} 的技术方案}
-正文会显示 \LaTeX{}。查看左侧 PDF 导航栏，书签应该显示为：“关于 LaTeX 的技术方案”。
+% 正确用法
+\section{\LaTeX 或 \TeX 使用指南}
+% 在PDF书签中会显示为 "LaTeX 使用指南"
+
+% 示例 1：用纯文本代替公式
+\section{\texorpdfstring{$E=mc^2$}{E=mc2}}
+正文里显示能量守恒：$E=mc^2$。
+
+\section{$E=mc^2$}
+
+% 示例 2：使用 Unicode 字符（希腊字母）
+\section{\texorpdfstring{关于 $\alpha$ 的讨论}{关于 α 的讨论}}
+正文里显示希腊字母 $\alpha$。
+
+\section{关于 $\alpha$ 的讨论}
 
 \end{document}

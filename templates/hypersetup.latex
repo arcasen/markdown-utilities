@@ -33,3 +33,18 @@ $endif$
 $endif$
   breaklinks=true,
   pdfcreator={LaTeX via pandoc with the Eisvogel template}}
+
+% Enable the hyperref package to substitute the complex, typesetting-heavy 
+% \LaTeX logo with the plain text string 'LaTeX' when building PDF 
+% bookmarks and document properties, thereby preventing compilation 
+% errors and text distortion in the PDF viewer's navigation pane.
+\pdfstringdefDisableCommands{%
+  \def\LaTeX{LaTeX}%
+  \def\TeX{TeX}%
+}
+
+% When parsing \LaTeX in Markdown headings, Pandoc automatically wraps 
+% it inside \texorpdfstring.
+% Redefine \texorpdfstring to ignore the second argument (#2) and only 
+% output the first argument (#1).
+\long\def\texorpdfstring#1#2{#1}

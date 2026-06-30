@@ -67,17 +67,17 @@ code including tildes
 
 :::
 
-这里 `#helloworld` 是一个标识符，可以使用 `[Helloworld](#helloworld)` 建立链接； `c` 和 `numberLines` 是类，并且 `startFrom` 是一个值为 101 的属性。某些输出格式可以使用此信息进行语法高亮显示。目前，唯一使用此信息的输出格式是 HTML、LaTeX、Docx、Ms 和 PowerPoint。如果您的输出格式和语言支持高亮显示，则上面的代码块将高亮显示，并带有编号行。（要查看支持哪些语言，请输入 `pandoc --list-highlight-languages`。）
+这里 `#helloworld` 是一个标识符，可以使用 `[Helloworld](#helloworld)` 建立链接； `c` 和 `numberLines` 是类，并且 `startFrom` 是一个值为 101 的属性。某些输出格式可以使用此信息进行语法高亮显示。目前，唯一使用此信息的输出格式是 HTML、\LaTeX、Docx、Ms 和 PowerPoint。如果您的输出格式和语言支持高亮显示，则上面的代码块将高亮显示，并带有编号行。（要查看支持哪些语言，请输入 `pandoc --list-highlight-languages`。）
 
 `numberLines`（或 `number-lines`）类 将使代码块的行以1或 `startFrom` 的属性值开始进行编号。`lineAnchors`（或 `line-anchors`）类将使这些行在 HTML 输出中成为可点击的锚点。
 
 #### 语法高亮显示
 
-Pandoc 会在标记了语言名称的代码块中自动高亮语法，使用 Haskell 库 skylighting[^skylighting] 进行高亮。目前仅支持 HTML、EPUB、Docx、Ms、Man 和 LaTeX/PDF 输出的高亮功能。要查看 pandoc 识别的语言名称列表，请输入 `pandoc --list-highlight-languages`。
+Pandoc 会在标记了语言名称的代码块中自动高亮语法，使用 Haskell 库 skylighting[^skylighting] 进行高亮。目前仅支持 HTML、EPUB、Docx、Ms、Man 和 \LaTeX/PDF 输出的高亮功能。要查看 pandoc 识别的语言名称列表，请输入 `pandoc --list-highlight-languages`。
 
 [^skylighting]: <https://github.com/jgm/skylighting>
 
-语法高亮的风格通过样式表的变化进行控制：HTML 输出使用级联样式表（CSS），LaTeX（以及 PDF）输出使用一组 `\newcommand` 选项。这些高亮指令直接嵌入输出文件中（当生成独立文档时），因此不易覆盖。不过，你可以从预定义的高亮样式列表中选择。运行以下命令可查看完整样式列表：
+语法高亮的风格通过样式表的变化进行控制：HTML 输出使用级联样式表（CSS），\LaTeX（以及 PDF）输出使用一组 `\newcommand` 选项。这些高亮指令直接嵌入输出文件中（当生成独立文档时），因此不易覆盖。不过，你可以从预定义的高亮样式列表中选择。运行以下命令可查看完整样式列表：
 
 ```bash
 pandoc --list-highlight-styles
@@ -109,7 +109,7 @@ pandoc --highlight-style my.theme
 
 如果遇到 pandoc 报错“无法读取高亮主题”，请检查 JSON 文件是否使用 UTF-8 编码且没有字节顺序标记 (BOM)。
 
-输出格式为 LaTeX 或 PDF 时，
+输出格式为 \LaTeX 或 PDF 时，
 
 - 没有设置代码属性时，默认使用 `verbatim` 宏；
 - 设置代码属性时，使用 Pandoc 自定义的 `Shaded` 宏[^shaded]；
@@ -127,7 +127,7 @@ pandoc --highlight-style my.theme
   - Windows：`Alt + 0160`（小键盘）
   - Mac：`Option + Space`
   - HTML/XML：`&nbsp;`
-  - LaTeX：`~`（波浪号）
+  - \LaTeX：`~`（波浪号）
   - Unicode：`U+00A0`
 
 非断行空格的主要用途：
@@ -154,13 +154,13 @@ pandoc --highlight-style my.theme
 :::
 
 
-#### 关于 \texorpdfstring{\LaTeX}{LaTeX} 代码渲染
+#### 关于 \LaTeX 代码渲染
 
 <!--\LaTeX 宏包命令包含复杂的排版、字体和间距调整，PDF 阅读器无法直接在目录边栏中渲染这些排版样式-->
 
-pandoc 处理后的 tex 代码时显示 `lauange=TeX` 而非  `lauange=[LaTeX]TeX`，而前者不支持一些命令渲染，如`\begin`。
+Pandoc 处理后的 tex 代码时显示 `lauange=TeX` 而非  `lauange=[LaTeX]TeX`，而前者不支持一些命令渲染，如`\begin`。
 
-Pandoc 默认的 LaTeX 写入器（Writer）确实会将代码块标记为 `language=TeX`，但在 `listings` 宏包中，`[LaTeX]TeX` 才是专门针对 \LaTeXe 语法定制的方言（包含更多的现代命令支持）。
+Pandoc 默认的 \LaTeX 写入器（Writer）确实会将代码块标记为 `language=TeX`，但在 `listings` 宏包中，`[LaTeX]TeX` 才是专门针对 \LaTeXe 语法定制的方言（包含更多的现代命令支持）。
 
 为什么 Pandoc 默认只给 `TeX`？
 Pandoc 的设计哲学是**通用性**。在它的内部定义中，`tex` 语言标签对应的是基础的 \TeX 语法。而 `listings` 宏包是一个高度可定制的 \LaTeX 插件，它通过 `[dialect]language` 这种非标准语法来区分。Pandoc 的内置模板通常不会为了某个宏包的特殊语法而改变其通用的标签系统。

@@ -86,7 +86,7 @@ See the section on
 [heading identifiers](#heading-identifiers-in-html-latex-and-context).
 ```
 
-但请注意，这种提供章节链接的方法仅适用于 HTML、LaTeX 和 ConTeXt 格式。
+但请注意，这种提供章节链接的方法仅适用于 HTML、\LaTeX 和 ConTeXt 格式。
 
 如果 `--section-divs` 指定了该选项，则每个部分将被包裹在 section（或 div，如果指定了 html4）中，并且标识符将附加到封闭的 `<section>`（或 `<div>`）标签而不是标题本身。这允许使用 JavaScript 操作整个部分，或在 CSS 中进行不同的处理。
 
@@ -106,7 +106,7 @@ See the section on
 {#identifier .class .class key=value key=value}
 ```
 
-请注意，虽然此语法允许分配类和键/值属性，但编写者通常不会使用所有这些信息。标识符、类和键/值属性用于 HTML 和基于 HTML 的格式（例如 EPUB 和 slidy）。标识符用于 LaTeX、ConTeXt、Textile、Jira 标记和 AsciiDoc 编写器中的标签和链接锚点。
+请注意，虽然此语法允许分配类和键/值属性，但编写者通常不会使用所有这些信息。标识符、类和键/值属性用于 HTML 和基于 HTML 的格式（例如 EPUB 和 slidy）。标识符用于 \LaTeX、ConTeXt、Textile、Jira 标记和 AsciiDoc 编写器中的标签和链接锚点。
 
 如果指定了带有 `unnumbered` 类的标题，则即使使用 `--number-sections` 也不会被编号。属性上下文中的单个连字符（`-`） 相当于 `.unnumbered`，并且在非英语文档中更可取。例如：
 

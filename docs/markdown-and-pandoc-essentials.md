@@ -43,6 +43,8 @@ lang: zh
 
 ![[ chapters/mermaid.md ]]
 
+![[ chapters/troubleshootings.md ]]
+
 \backmatter
 
 ![[ chapters/references.md ]]

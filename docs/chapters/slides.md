@@ -1,6 +1,6 @@
 ## 幻灯片展示
 
-您可以使用 Pandoc 生成基于 HTML + JavaScript 的幻灯片演示文稿，可通过网页浏览器查看。有五种方式可以实现：使用 S5、DZSlides、Slidy、Slideous 或 reveal.js。您还可以使用 LaTeX Beamer 生成 PDF 格式的幻灯片，或生成 Microsoft PowerPoint 格式的幻灯片。
+您可以使用 Pandoc 生成基于 HTML + JavaScript 的幻灯片演示文稿，可通过网页浏览器查看。有五种方式可以实现：使用 S5、DZSlides、Slidy、Slideous 或 reveal.js。您还可以使用 \LaTeX Beamer 生成 PDF 格式的幻灯片，或生成 Microsoft PowerPoint 格式的幻灯片。
 
 以下是一个简单的幻灯片展示的 Markdown 源文件，名为 habits.txt：
 
@@ -266,7 +266,7 @@ contents...
 
 ### Beamer 中的框架属性
 
-有时需要在 Beamer 的框架中添加 LaTeX `[fragile]` 选项（例如，使用 minted 环境时）。可以通过在引入幻灯片的标题中添加 `fragile` 类强制实现：
+有时需要在 Beamer 的框架中添加 \LaTeX `[fragile]` 选项（例如，使用 minted 环境时）。可以通过在引入幻灯片的标题中添加 `fragile` 类强制实现：
 
 ```markdown
 # Fragile slide {.fragile}

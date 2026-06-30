@@ -8,7 +8,7 @@
 
 :::
 
-在使用 Pandoc 将 Markdown 文档转换为 PDF（通过 LaTeX）时，图片插入位置默认是*浮动的*（floating），并且将自动将图片宽度限制在文本宽度（`textwidth`）内，如：
+在使用 Pandoc 将 Markdown 文档转换为 PDF（通过 \LaTeX）时，图片插入位置默认是*浮动的*（floating），并且将自动将图片宽度限制在文本宽度（`textwidth`）内，如：
 
 ```markdown
 ![[ ../../examples/pandoc-flavored-markdown/images.md ]]
@@ -46,13 +46,13 @@
 ![](file.jpg){ width=50% }
 ```
 
-- 尺寸可能会转换为与输出格式兼容的形式（例如，将 HTML 转换为 LaTeX 时，以像素为单位的尺寸将转换为英寸）。像素与物理测量值之间的转换受 `--dpi` 选项影响（默认情况下，假定为 96 dpi，除非图像本身包含 dpi 信息）。
+- 尺寸可能会转换为与输出格式兼容的形式（例如，将 HTML 转换为 \LaTeX 时，以像素为单位的尺寸将转换为英寸）。像素与物理测量值之间的转换受 `--dpi` 选项影响（默认情况下，假定为 96 dpi，除非图像本身包含 dpi 信息）。
 
 - 单位 `%` 通常与某个可用空间相关。例如，上面的示例将渲染成以下内容。
   - HTML：`<img href="file.jpg" style="width: 50%;" />`
-  - LaTeX：`\includegraphics[width=0.5\textwidth,height=\textheight]{file.jpg}` （如果您使用自定义模板，则需要 `graphicx` 按照默认模板进行配置。）
+  - \LaTeX：`\includegraphics[width=0.5\textwidth,height=\textheight]{file.jpg}` （如果您使用自定义模板，则需要 `graphicx` 按照默认模板进行配置。）
   - ConTeXt：`\externalfigure[file.jpg][width=0.5\textwidth]`
-- 一些输出格式具有类（ ConTeXt）或唯一标识符（LaTeX `\caption`）或两者（HTML）。
+- 一些输出格式具有类（ ConTeXt）或唯一标识符（\LaTeX `\caption`）或两者（HTML）。
 - 当未指定 width 或 height 属性时，后备方法是查看图像分辨率和图像文件中嵌入的 dpi 元数据。
 
 示例：

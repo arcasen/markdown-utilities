@@ -136,4 +136,4 @@ See the [Introduction].
 请参考：[任何其它文本](#标题名称)
 ```
 
-内部链接目前支持 HTML 格式（包括 HTML 幻灯片和 EPUB）、LaTeX 和 ConTeXt。
+内部链接目前支持 HTML 格式（包括 HTML 幻灯片和 EPUB）、\LaTeX 和 ConTeXt。

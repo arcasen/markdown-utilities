@@ -2,7 +2,7 @@
 
 #### 元数据变量
 
-`title`, `author`, `date`： 用于标识文档的基本信息。可以通过 LaTeX 和 ConTeXt 将这些信息嵌入到 PDF 元数据中。可以通过 Pandoc 标题块设置，标题块支持多个作者，也可以通过 YAML 元数据块设置：
+`title`, `author`, `date`： 用于标识文档的基本信息。可以通过 \LaTeX 和 ConTeXt 将这些信息嵌入到 PDF 元数据中。可以通过 Pandoc 标题块设置，标题块支持多个作者，也可以通过 YAML 元数据块设置：
 
 ```yaml
 ---
@@ -14,9 +14,9 @@ author:
 
 如果仅需设置 PDF 或 HTML 的元数据，而不在文档中包含标题块，可以设置 `title-meta`、`author-meta` 和 `date-meta` 变量。（默认情况下，这些变量会根据 `title`、`author` 和 `date` 自动设置。）HTML 页面标题由 `pagetitle` 设置，默认与 `title` 相同。
 
-`subtitle`： 文档副标题，包含在 HTML、EPUB、LaTeX、ConTeXt 和 docx 文档中。
+`subtitle`： 文档副标题，包含在 HTML、EPUB、\LaTeX、ConTeXt 和 docx 文档中。
 
-`abstract`： 文档摘要，包含在 HTML、LaTeX、ConTeXt、AsciiDoc 和 docx 文档中。
+`abstract`： 文档摘要，包含在 HTML、\LaTeX、ConTeXt、AsciiDoc 和 docx 文档中。
 
 `abstract-title`： 摘要标题，目前仅用于 HTML、EPUB 和 docx。会根据 `lang` 自动设置为本地化值，但可以手动覆盖。
 
@@ -48,7 +48,7 @@ description: |
 
 #### 语言变量
 
-`lang`： 使用 IETF 语言标签（遵循 BCP 47 标准）标识文档的主要语言，例如 `en` 或 `en-GB`。可使用语言子标签查询工具验证这些标签。影响大多数格式，并在使用 LaTeX（通过 babel 和 polyglossia）或 ConTeXt 生成 PDF 时控制连字符。
+`lang`： 使用 IETF 语言标签（遵循 BCP 47 标准）标识文档的主要语言，例如 `en` 或 `en-GB`。可使用语言子标签查询工具验证这些标签。影响大多数格式，并在使用 \LaTeX（通过 babel 和 polyglossia）或 ConTeXt 生成 PDF 时控制连字符。
 
 使用带有 `lang` 属性的原生 Pandoc Div 和 Span 切换语言：
 
@@ -70,7 +70,7 @@ More text in English. ['Zitat auf Deutsch.']{lang=de}
 
 对于双向文档，可以使用带有 `dir` 属性（值为 `rtl` 或 `ltr`）的原生 Pandoc Span 和 Div 来覆盖某些输出格式的默认方向。如果最终渲染器（如生成 HTML 时的浏览器）支持 Unicode 双向算法，可能不需要此操作。
 
-在使用 LaTeX 处理双向文档时，仅 `xelatex` 引擎完全支持（使用 `--pdf-engine=xelatex`）。
+在使用 \LaTeX 处理双向文档时，仅 `xelatex` 引擎完全支持（使用 `--pdf-engine=xelatex`）。
 
 #### HTML 变量
 
@@ -161,7 +161,7 @@ header-includes: |
 
 `theme`, `colortheme`, `fonttheme`, `innertheme`, `outertheme`： Beamer 主题。
 
-`themeoptions`, `colorthemeoptions`, `fontthemeoptions`, `innerthemeoptions`, `outerthemeoptions`： LaTeX Beamer 主题的选项（列表）。
+`themeoptions`, `colorthemeoptions`, `fontthemeoptions`, `innerthemeoptions`, `outerthemeoptions`： \LaTeX Beamer 主题的选项（列表）。
 
 `titlegraphic`： 标题页图片：可以是列表。
 
@@ -175,9 +175,9 @@ header-includes: |
 
 `monofont`： 用于代码的字体。
 
-#### LaTeX 变量
+#### \LaTeX 变量
 
-Pandoc 在使用 LaTeX 引擎生成 PDF 时使用这些变量。
+Pandoc 在使用 \LaTeX 引擎生成 PDF 时使用这些变量。
 
 ##### 布局
 
@@ -233,7 +233,7 @@ hyperrefoptions:
 ...
 ```
 
-`indent`： 如果为 `true`，Pandoc 将使用文档类的缩进设置（否则默认 LaTeX 模板会移除缩进并在段落间添加间距）。
+`indent`： 如果为 `true`，Pandoc 将使用文档类的缩进设置（否则默认 \LaTeX 模板会移除缩进并在段落间添加间距）。
 
 `linestretch`： 使用 setspace 包调整行间距，例如 `1.25`、`1.5`。
 
@@ -245,7 +245,7 @@ hyperrefoptions:
 
 `secnumdepth`： 章节编号深度（配合 `--number-sections` 选项或 `numbersections` 变量）。
 
-`beamerarticle`： 从 Beamer 幻灯片生成文章。**注意**：若设置此变量，必须指定 Beamer 写入器，但使用默认 LaTeX 模板，例如：`Pandoc -Vbeamerarticle -t beamer --template default.latex`。
+`beamerarticle`： 从 Beamer 幻灯片生成文章。**注意**：若设置此变量，必须指定 Beamer 写入器，但使用默认 \LaTeX 模板，例如：`Pandoc -Vbeamerarticle -t beamer --template default.latex`。
 
 `handout`： 生成 Beamer 幻灯片的讲义版本（将叠加内容压缩为单页）。
 
@@ -257,9 +257,9 @@ hyperrefoptions:
 
 ##### 字体
 
-`fontenc`： 通过 fontenc 包指定字体编码（配合 pdflatex）；默认值为 `T1`（参见 [LaTeX 字体编码指南](https://ctan.org/pkg/encguide)）。
+`fontenc`： 通过 fontenc 包指定字体编码（配合 pdflatex）；默认值为 `T1`（参见 [\LaTeX 字体编码指南](https://ctan.org/pkg/encguide)）。
 
-`fontfamily`： 配合 `pdflatex` 使用的字体包：TeX Live 包含许多选项，详见 [LaTeX 字体目录](https://tug.org/FontCatalogue/)。默认值为 [Latin Modern](https://ctan.org/pkg/lm)。
+`fontfamily`： 配合 `pdflatex` 使用的字体包：\TeX Live 包含许多选项，详见 [\LaTeX 字体目录](https://tug.org/FontCatalogue/)。默认值为 [Latin Modern](https://ctan.org/pkg/lm)。
 
 `fontfamilyoptions`： 作为 `fontfamily` 的包的选项；可重复设置多个选项。例如，通过 `libertinus` 宏包[^libertinus]使用 Libertine 字体并启用比例小写（旧式）数字：
 
@@ -496,7 +496,7 @@ $endif$
 
 `toc`： 如果指定了 [`--toc/--table-of-contents`](https://pandoc.org/MANUAL.html#option--toc[)，则为非空值。
 
-`toc-title`： 目录标题（仅适用于 EPUB、HTML、revealjs、opendocument、odt、docx、pptx、Beamer、LaTeX）。
+`toc-title`： 目录标题（仅适用于 EPUB、HTML、revealjs、opendocument、odt、docx、pptx、Beamer、\LaTeX）。
 
 ::: caution
 
@@ -504,7 +504,7 @@ $endif$
 
 :::
 
-在使用 Pandoc 将文档转换为 PDF 时，Pandoc 会根据输入文件的内容、元数据（metadata）以及使用的模板自动生成一些变量。这些变量主要用于模板渲染，特别是在 LaTeX 或其他模板中生成 PDF 时。 例如，即使不设置 `header-includes`， Pandoc 也会自动设置一些变量，可以查看生成的 LaTeX 即知。在自动设置的变量中定义了：
+在使用 Pandoc 将文档转换为 PDF 时，Pandoc 会根据输入文件的内容、元数据（metadata）以及使用的模板自动生成一些变量。这些变量主要用于模板渲染，特别是在 \LaTeX 或其他模板中生成 PDF 时。 例如，即使不设置 `header-includes`， Pandoc 也会自动设置一些变量，可以查看生成的 \LaTeX 即知。在自动设置的变量中定义了：
 
 - `figurename`
 - `tablename`
@@ -513,7 +513,7 @@ $endif$
 - `lstlistlistingname`
 - 等等
 
-如果在文档中重新设置 `header-includes`，将被置于内置的 `header-includes` 之前，无法修改这些自动设置的变量。可以在 LaTeX 模板的 `header-includes` 之后增加 `header-continue`。这样，我们就可以在文档中设置新的数据，如：
+如果在文档中重新设置 `header-includes`，将被置于内置的 `header-includes` 之前，无法修改这些自动设置的变量。可以在 \LaTeX 模板的 `header-includes` 之后增加 `header-continue`。这样，我们就可以在文档中设置新的数据，如：
 
 ```yaml
 header-continue: |
