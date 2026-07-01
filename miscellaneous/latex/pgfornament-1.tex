@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage{ctex} % 支持中文
+\usepackage{tikz}
+\usepackage{pgfornament} % 核心：引入蔓藤花纹宏包
+\usepackage{lipsum}
+
+% ==========================================
+% 定义渲染环境 rendered (使用 pgfornament 蔓藤)
+% ==========================================
+\newenvironment{rendered}{%
+  \par\vspace{0.6cm}% 上方留白
+  \noindent
+  % --- 顶部分割线：中央蔓藤花卉 + 两侧淡出细线 ---
+  \begin{tikzpicture}
+    \coordinate (L) at (0,0);
+    \coordinate (R) at (\textwidth,0);
+    \coordinate (C) at (0.5\textwidth, 0);
+    
+    % 1. 绘制中央的蔓藤花纹（这里选用经典的 70 号左右对称花纹，可根据需要更换编号）
+    % \pgfornament[scale=缩放, color=颜色]{编号}
+    \node[teal] at (C) {\pgfornament[scale=0.4, color=teal]{70}};
+    
+    % 2. 两侧的细线，给中央的花纹留出空间（xshift 距离根据花纹大小调整，这里设为 1.5cm）
+    \draw[teal!75!black, thin] (L) -- ([xshift=-1.5cm]C);
+    \draw[teal!75!black, thin] (R) -- ([xshift=1.5cm]C);
+  \end{tikzpicture}%
+  \par\nopagebreak[4]% 强力锚定，不准在此分页
+  \vspace{0.2cm}%
+}{%
+  \par\nopagebreak[4]% 核心：环境末尾文字绝对不与底部的花纹分离
+  \vspace{0.2cm}%
+  \noindent
+  % --- 底部分割线：与顶部呼应 ---
+  \begin{tikzpicture}
+    \coordinate (L) at (0,0);
+    \coordinate (R) at (\textwidth,0);
+    \coordinate (C) at (0.5\textwidth, 0);
+    
+    % 底部使用相同的蔓藤花纹
+    \node[teal] at (C) {\pgfornament[scale=0.4, color=teal]{70}};
+    
+    \draw[teal!75!black, thin] (L) -- ([xshift=-1.5cm]C);
+    \draw[teal!75!black, thin] (R) -- ([xshift=1.5cm]C);
+  \end{tikzpicture}%
+  \par\vspace{0.6cm}% 下方留白
+}
+
+\begin{document}
+
+\lipsum[1]
+
+\begin{rendered}
+    这是一个使用 \verb|pgfornament| 宏包渲染古典蔓藤花纹的自定义环境。
+    
+    我们在这里使用了第 70 号花纹（一个非常优雅的左右对称蔓藤图案），并将其通过 TikZ 的 \verb|\node| 居中放置，两边延伸出纤细的 Teal 色线条。
+    
+    完美的 \verb|\par\nopagebreak[4]| 闭合机制依然在起作用。不论你写了多少行，底部的蔓藤图案和本段最后一行字都会死死地“抱”在一起，哪怕到了页面边缘，也绝不会发生“人花分离”的排版惨剧。
+\end{rendered}
+
+\lipsum[2]
+
+\end{document}

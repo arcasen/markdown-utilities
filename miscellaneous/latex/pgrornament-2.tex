@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage{ctex} % 支持中文
+\usepackage{tikz}
+\usepackage{pgfornament} % 引入蔓藤花纹宏包
+\usepackage{lipsum}
+
+% ==========================================
+% 定义渲染环境 rendered (上下双线：上粗下细 + 蔓藤)
+% ==========================================
+\newenvironment{rendered}{%
+  \par\vspace{0.6cm}% 环境上方留白
+  \noindent
+  % --- 【顶部分割线】 ---
+  \begin{tikzpicture}
+    \coordinate (L) at (0,0);
+    \coordinate (R) at (\textwidth,0);
+    \coordinate (C) at (0.5\textwidth,0);
+    
+    % 1. 上方的粗线 (高一点，y=0.15)
+    \draw[teal, line width=1.5pt] (0, 0.15) -- (\textwidth, 0.15);
+    % 2. 下方的细线 (低一点，y=0) 并为中央蔓藤留出 1.5cm 空间
+    \draw[teal!75!black, thin] (L) -- ([xshift=-1.5cm]C);
+    \draw[teal!75!black, thin] (R) -- ([xshift=1.5cm]C);
+    
+    % 3. 中央蔓藤花纹 (放在细线层，看起来更灵动)
+    \node[teal] at (C) {\pgfornament[scale=0.4, color=teal]{70}};
+  \end{tikzpicture}%
+  \par\nopagebreak[4]% 强力锚定：顶部分割线与内容绝不断开
+  \vspace{0.3cm}%
+}{%
+  \par\nopagebreak[4]% 核心：环境末尾文字绝对不与底部分割线断开
+  \vspace{0.3cm}%
+  \noindent
+  % --- 【底部分割线】 ---
+  \begin{tikzpicture}
+    \coordinate (L) at (0,0);
+    \coordinate (R) at (\textwidth,0);
+    \coordinate (C) at (0.5\textwidth,0);
+    
+    % 1. 上方的粗线 (高一点，y=0.15)
+    \draw[teal, line width=1.5pt] (0, 0.15) -- (\textwidth, 0.15);
+    % 2. 下方的细线 (低一点，y=0) 并为中央蔓藤留出 1.5cm 空间
+    \draw[teal!75!black, thin] (L) -- ([xshift=-1.5cm]C);
+    \draw[teal!75!black, thin] (R) -- ([xshift=1.5cm]C);
+    
+    % 3. 中央蔓藤花纹
+    \node[teal] at (C) {\pgfornament[scale=0.4, color=teal]{70}};
+  \end{tikzpicture}%
+  \par\vspace{0.6cm}% 环境下方留白
+}
+
+\begin{document}
+
+\lipsum[1]
+
+\begin{rendered}
+    这是一个全新设计的自定义环境。
+    
+    现在，环境的顶部和底部各拥有两条分割线，并且严格遵循了**“上面粗、下面细”**的几何美学：
+    \begin{itemize}
+        \item 顶部的最上面是一条 1.5pt 的 Teal 色粗实线，紧接着下方是一条带蔓藤花纹的细线。
+        \item 底部的最上面同样是一条 1.5pt 的粗实线，下方是带蔓藤花纹的细线，形成了完美的视觉呼应。
+    \end{itemize}
+    
+    多亏了 \verb|\par\nopagebreak[4]|，无论环境内部文字多长，底部的这组“双线+蔓藤”图案都绝对不会孤单地跑到下一页页首，它会死死粘着最后这一行字。
+\end{rendered}
+
+\lipsum[2]
+
+\end{document}
