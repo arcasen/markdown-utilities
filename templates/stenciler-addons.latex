@@ -17,23 +17,25 @@
 % Defining the 'rendered' environment to show the rendered result
 \usepackage{tikz}
 \newenvironment{rendered}{%
-  \par\vspace{0.3cm}% 1. 环境上方留出 0.3cm 间距
+  \par\addvspace{0.3cm}%
   \noindent
   \begin{tikzpicture}
     \draw[line width=2pt, draw=blue!55!black] (0,0.15) -- (\textwidth,0.15);
     \draw[line width=1pt, draw=blue!55!black!80] (0,0) -- (\textwidth,0);
   \end{tikzpicture}%
-  \par\nopagebreak[4]% 2. 强力锚定：顶部分割线与环境内第一行字不切断
-  \vspace{0.2cm}% 线条与内部文字的微调间距
+  \par\nopagebreak[4]% 确保下面紧跟的垂直间距不会断开
+  % \vspace{0.2cm}%
+  % \nopagebreak[4]% 再次强力锚定，禁止与随后的第一行文字断开
 }{%
-  \par\nopagebreak[4]% 3. 核心修改：结束内部文字，并绝对禁止在这里分页！
-  \vspace{0.2cm}% 内部文字与底部分割线的微调间距
+  \par\nopagebreak[4]% 内部最后一行文字结束后，禁止分页
+  % \vspace{0.2cm}%
+  % \nopagebreak[4]% 禁止在间距后分页
   \noindent
   \begin{tikzpicture}
     \draw[line width=1pt, draw=blue!55!black!80] (0,0) -- (\textwidth,0);
     \draw[line width=2pt, draw=blue!55!black] (0,-0.15) -- (\textwidth,-0.15);
   \end{tikzpicture}%
-  \par\vspace{0.3cm}% 4. 底部分割线画完后，开启新段落并留出 0.3cm 间距
+  \par\addvspace{0.3cm}%
 }
 
 \usepackage[most]{tcolorbox}
