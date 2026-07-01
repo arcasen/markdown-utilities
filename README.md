@@ -2,13 +2,13 @@
 
 ## Introduction
 
-Markdown 的优点是简洁, 只需很少的几种标记即可将文档内容条理清晰地呈现给读者, 使用者非常容易上手, 而 AsciiDoc, reStructuredText 等标记文件虽然功能较多, 但掌握起来并非易事, 更不用说重量级的排版工具 LaTeX. 然而, "成也萧何, 败也萧何", Markdown 缺少一项非常重要的文件包含功能, 这限制了使用 Markdown 构建复杂文档的功能. 本项目采用文本处理程序 (如 perl, awk, sed 等) 和 GNU Make 实现了 Markdown 的文件包含功能, 能够先自动生成 .md 文件的包含依赖关系, 然后通过 GNU Make 构建一个单一的 .md 文件.
+Markdown 的优点是简洁, 只需很少的几种标记即可将文档内容条理清晰地呈现给读者, 使用者非常容易上手, 而 AsciiDoc, reStructuredText 等标记文件虽然功能较多, 但掌握起来并非易事, 更不用说重量级的排版工具 LaTeX. 然而, "成也萧何, 败也萧何", Markdown 缺少一项非常重要的文件包含功能, 这限制了使用 Markdown 构建复杂文档的功能. 本项目采用文本处理程序 `mdtool` (Python 程序) 和 GNU Make 实现了 Markdown 的文件包含功能, 能够先自动生成 .md 文件的包含依赖关系, 然后通过 GNU Make 构建一个单一的 .md 文件.
 
-The advantage of Markdown is its simplicity; with just a few types of markup, it can present document content to readers in a clear and organized manner, making it very easy for users to get started. In contrast, markup languages like AsciiDoc and reStructuredText, while offering more features, are not as easy to master—not to mention heavyweight typesetting tools like LaTeX. However, "what makes it succeed can also lead to its failure." Markdown lacks a crucial file inclusion function, which limits its ability to build complex documents. This project utilizes text processing programs (such as Perl, Awk, Sed, etc.) and GNU Make to implement file inclusion for Markdown. It can automatically generate the inclusion dependencies of .md files and then use GNU Make to build a single, unified .md file.
+The advantage of Markdown is its simplicity; with just a few types of markup, it can present document content to readers in a clear and organized manner, making it very easy for users to get started. In contrast, markup languages like AsciiDoc and reStructuredText, while offering more features, are not as easy to master—not to mention heavyweight typesetting tools like LaTeX. However, "what makes it succeed can also lead to its failure." Markdown lacks a crucial file inclusion function, which limits its ability to build complex documents. This project utilizes text processing programs `mdtool` (Python program) and GNU Make to implement file inclusion for Markdown. It can automatically generate the inclusion dependencies of .md files and then use GNU Make to build a single, unified .md file.
 
 ## Prerequistes
 
-- Text processing utilities: perl, awk, sed
+- Python 3
 - GNU make
 - If you want to convert Markdown to PDF, you must install TeX Live and Pandoc.
 - Noto and JetBrain Mono fonts
@@ -51,10 +51,11 @@ OR
 
 注意:
 
-- 文件包含指令必须单独成行,
-- `![[` 前面可以有缩进, 替换时每一行都保留该缩进,
-- `filename` 前后可以有空格, 可以为任意文本文件,
-- `]]` 后面除了空格外, 不能含有其它字符,
+- 文件包含指令必须单独成行
+- `![[` 前面可以有缩进, 替换时每一行都保留该缩进
+- `filename` 前后可以有空格, 可以为任意文本文件
+- `]]` 后面除了空格外, 不能含有其它字符
+- 循环嵌套会导致 `make` 错误
 - `:range` 是可选的 (optional), 表示行号范围字符串 (即 `:start-end`), 行号从 1 开始, 支持格式:
   - 如果缺省, 表示包含整个文档
   - `10`: 仅第 10 行
@@ -72,7 +73,12 @@ Note:
   this indentation will be retained on each line.
 - Spaces before or after `filename` are allowed.
 - After `]]`, only whitespace is permitted—no other characters are allowed.
-- Circular file inclusions can cause errors.
+- Nested loops will cause `make` errors.
+- `:range` is optional and represents a line number range string (i.e., `:start-end`). Line numbers are 1-indexed. The supported formats are:
+  - Omitted (Default): Represents the entire document.
+  - `10`: Line 10 only.
+  - `10-20`: From line 10 to line 20 (inclusive).
+  - `10-`: From line 10 to the end of the file.
 
 Beset practice: To ensure content between files does not interfere with each other, each directive in a file should be preceded and followed by a blank line.
 
