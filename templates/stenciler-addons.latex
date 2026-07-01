@@ -17,21 +17,23 @@
 % Defining the 'rendered' environment to show the rendered result
 \usepackage{tikz}
 \newenvironment{rendered}{%
-  % \par\vspace{0.5cm}% Adding vertical space before the top line
-  % Drawing the top separator line with TikZ
-  \noindent\begin{tikzpicture}
-    \draw[line width=2pt, draw=teal] (0,0) -- (\textwidth,0);
-  \end{tikzpicture}\nobreak
-  % 渲染结果：
-  % \par\vspace{0.2cm}% Adding space between line and content
+  \par\vspace{0.3cm}% 1. 环境上方留出 0.3cm 间距
+  \noindent
+  \begin{tikzpicture}
+    \draw[line width=2pt, draw=blue!55!black] (0,0.15) -- (\textwidth,0.15);
+    \draw[line width=1pt, draw=blue!55!black!80] (0,0) -- (\textwidth,0);
+  \end{tikzpicture}%
+  \par\nopagebreak[4]% 2. 强力锚定：顶部分割线与环境内第一行字不切断
+  \vspace{0.2cm}% 线条与内部文字的微调间距
 }{%
-  % \par\vspace{0.2cm}% Adding space after content
-  % Drawing the bottom separator line with TikZ
-  \noindent\begin{tikzpicture}
-    \node (line) at (0,0) {}; % Node to anchor baseline
-    \draw[line width=2pt, draw=teal] (0,0) -- (\textwidth,0);
-  \end{tikzpicture}\nobreak
-  % \par\vspace{0.5cm}% Adding vertical space after the bottom line
+  \par\nopagebreak[4]% 3. 核心修改：结束内部文字，并绝对禁止在这里分页！
+  \vspace{0.2cm}% 内部文字与底部分割线的微调间距
+  \noindent
+  \begin{tikzpicture}
+    \draw[line width=1pt, draw=blue!55!black!80] (0,0) -- (\textwidth,0);
+    \draw[line width=2pt, draw=blue!55!black] (0,-0.15) -- (\textwidth,-0.15);
+  \end{tikzpicture}%
+  \par\vspace{0.3cm}% 4. 底部分割线画完后，开启新段落并留出 0.3cm 间距
 }
 
 \usepackage[most]{tcolorbox}
@@ -44,4 +46,7 @@
   drop fuzzy shadow,
   #1,
 }
+
+% 设置让 quote 环境开始时自动应用斜体 (\itshape)
+\AtBeginEnvironment{quote}{\itshape}
 % ---------------------------------------------------------

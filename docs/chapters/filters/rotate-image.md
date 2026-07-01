@@ -22,7 +22,7 @@ Pandoc 在生成图片的 \LaTeX 文本时，将 `width=50%` 转换为 `width=0.
 
 过滤阶段 (Filter)：Panflute 脚本就在这里运行。此时转换还没发生，拿到的 `elem.attributes['width']` 确实就是 "50%"。
 
-渲染阶段 (Writer)：如果你不使用过滤器，Pandoc 的 \LaTeX{ }Writer 会在最后输出 `.tex` 文件时，根据内部逻辑把 "50%" 变成 `0.5\maxwidth`。但如果过滤器返回了 `RawInline`（原生 \LaTeX 代码），你跳过了 Writer 的自动处理。
+渲染阶段 (Writer)：如果你不使用过滤器，Pandoc 的 \LaTeX{} Writer 会在最后输出 `.tex` 文件时，根据内部逻辑把 "50%" 变成 `0.5\maxwidth`。但如果过滤器返回了 `RawInline`（原生 \LaTeX 代码），你跳过了 Writer 的自动处理。
 
 在这个过滤器中，使用了 `adjustbox` 包，而不返回含 `\includegraphics[...]` 的 `RawInline`，保证 Pandoc 在渲染阶段处理其它属性（如：`width` 和 `height`）。
 

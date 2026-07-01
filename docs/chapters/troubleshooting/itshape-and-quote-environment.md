@@ -10,9 +10,7 @@
 
 ```
 
-**完整示例**
-
-你可以把这段代码复制到你的 LaTeX 编辑器中运行看看效果：
+完整示例：
 
 ```latex
 \documentclass{article}
