@@ -15,9 +15,9 @@ filters:
   - latex-environment
   - pandoc-crossref
   - citeproc
-  - pageref
   - rotate-image
-  # - hypertext-reference
+  - hypertext-reference
+  - pageref
 
 # Resolve '! LaTeX Error: Environment lstlisting unenabled.' when
 # using the pandoc-crossref filter together with Eisvogel template
