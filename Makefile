@@ -1,5 +1,5 @@
 # Makefile for merging Markdown files and converting Markdown to PDF, HTML, TEX etc
-# Version: 20260626
+# Version: 20260728
 
 # Specify input and output directories
 DOCS ?= docs
@@ -11,10 +11,13 @@ SETTINGS := defaults.yaml metadata.yaml preamble.tex
 # Copy all files to the '$(DIST)' directory, where .md files will have their 
 # extensions changed to .markdown. Later, rules will be defined to convert 
 # these .markdown files into the final .md files.
+NOTEBOOKS := $(patsubst $(DOCS)%,$(DIST)%,$(patsubst %.ipynb,%.markdown,$(shell find $(DOCS) -name "*.ipynb")))
 DOCUMENTS := $(shell find $(DOCS) -not -path $(DOCS)) # everything under $(DOCS)
-DUPLICATE := $(patsubst $(DOCS)%,$(DIST)%,$(subst .md,.markdown,$(DOCUMENTS)))
+DUPLICATE := $(patsubst $(DOCS)%,$(DIST)%,$(patsubst %.md,%.markdown,$(DOCUMENTS)))
+DUPLICATE += $(NOTEBOOKS)
 DUPLICATE += $(patsubst %,$(DIST)/%,$(SETTINGS))
 MARKDOWNS := $(patsubst $(DOCS)%.md,$(DIST)%.markdown,$(shell find $(DOCS) -name "*.md"))
+MARKDOWNS += $(NOTEBOOKS)
 
 # Proccessed .md documents (will be created in the directory '$(DIST)')
 TARGETS   := $(patsubst $(DIST)/%,%,$(patsubst %.markdown,%.md,$(MARKDOWNS)))
@@ -80,6 +83,13 @@ $(DIST)/%.markdown: $(DOCS)/%.md
 	@echo "Creating $@ ..."
 	@mkdir -p $(dir $@)
 	@cp -rf $< $@
+	@mdtool rebase $@ -d $(DIST)
+
+$(DIST)/%.markdown: $(DOCS)/%.ipynb
+	@echo "Creating $@ ..."
+	@mkdir -p $(dir $@)
+	@jupyter nbconvert --to markdown $< --output $(notdir $(basename $@)) --output-dir $(dir $@)
+	@mv $(basename $@).md $@
 	@mdtool rebase $@ -d $(DIST)
 
 # Rule: copy other files to the directory '$(DIST)'

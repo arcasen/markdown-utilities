@@ -33,3 +33,5 @@ playground/
 
 *.bak
 *.txt
+
+.ipynb_checkpoints/
