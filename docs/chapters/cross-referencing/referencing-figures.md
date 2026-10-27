@@ -11,3 +11,7 @@
 ```markdown
 ![alt text](/path/to/image){#fig:label width=32px}
 ```
+
+::: caution
+标题与属性之间不能有空格。
+:::

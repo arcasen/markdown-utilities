@@ -64,7 +64,7 @@ listings: true
 # download csl styles from https://github.com/citation-style-language/styles
 # store csl styles in ~/.local/share/pandoc/cls (for Debian or macOS)
 # csl styles preview: https://www.zotero.org/styles
-csl: apa.csl
+csl: ieee.csl
 
 # ==================== Math rendering in HTML ===================
 html-math-method:

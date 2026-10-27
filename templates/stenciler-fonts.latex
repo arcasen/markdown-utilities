@@ -2,6 +2,7 @@
 % Fonts Settings
 % ---------------------------------------------------------
 \usepackage{fontspec}
+\usepackage{ifplatform}
 % \setmainfont{Noto Serif CJK SC}
 % \setsansfont{Noto Sans CJK SC}
 % \setmonofont{Source Han Mono}
@@ -12,12 +13,24 @@
 
 \makeatletter
 \ifdefstring{\stenciler@lang}{zh}{
-\setCJKmainfont[
-  ItalicFont = Noto Sans CJK SC Thin,     
-  BoldFont   = Noto Sans CJK SC,
-]{Noto Serif CJK SC}
-\setCJKsansfont{Noto Sans CJK SC}
+% 修改默认字体及其粗体
+\ifmacosx
+  \setCJKmainfont[ 
+    % 开启伪斜体，倾斜角度0.15≈8.6度，常用0.15~0.2
+    % AutoFakeSlant  = 0.15,  
+    ItalicFont = STKaiti,  
+    BoldFont   = Noto Sans CJK SC,
+  ]{Noto Serif CJK SC}
+\else\iflinux
+  \setCJKmainfont[
+    ItalicFont = FandolKai-Regular,   
+    BoldFont   = Noto Sans CJK SC,
+  ]{Noto Serif CJK SC}
+\fi\fi
+
+% \setCJKsansfont{Noto Sans CJK SC}
 % \setCJKmonofont{Sarasa Mono SC} % 默认为仿宋
+
 }{\relax}
 \makeatother
 % ---------------------------------------------------------
