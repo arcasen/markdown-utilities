@@ -133,6 +133,15 @@ Pandoc 同样可以识别 Emacs `orgtbl‑mode` 输出的管道表格，允许�
 
 核心分界：**简单表格、多行表格和网格表格依赖等宽字体、必须手工对齐列；管道表格不需要列对齐，兼容比例字体。**
 
+| 属性 | Simple | Multiline | Grid | Pipe |
+|---|---|---|---|---|
+| 是否需要等宽对齐 | Yes | Yes | Yes | No |
+| 单元格内换行 | No | Yes | Yes | No |
+| 块元素（列表/代码） | No | No | Yes | No |
+| 单元格合并 | No | No | Yes | No |
+| 表头能否省略 | Yes | Yes | Yes | No（可空表头） |
+: `simple_tables` / `multiline_tables` / `grid_tables` / `pipe_tables` 对比 {.striped}
+
 **1. Simple table（简单表格，`simple_tables`）**
 
 **特点**
@@ -152,6 +161,16 @@ Pandoc 同样可以识别 Emacs `orgtbl‑mode` 输出的管道表格，允许�
 - 简短纯文本、数字小表；
 - 追求极致简洁、不希望有过多标点符号干扰的纯文本阅读。
 
+**单元格对齐**
+
+```markdown
+![[ ../../examples/pandoc-flavored-markdown/tables/alignment-of-simple-tables.md ]]
+```
+
+::: rendered
+![[ ../../examples/pandoc-flavored-markdown/tables/alignment-of-simple-tables.md ]]
+:::
+
 **2. Multiline table（多行表格，`multiline_tables`）**
 
 **特点**
@@ -169,6 +188,26 @@ Pandoc 同样可以识别 Emacs `orgtbl‑mode` 输出的管道表格，允许�
 **适用**
 
 - 文字较长、需要单元格内换行，但不需要列表/代码的表格
+
+**单元格对齐**
+
+```markdown
+![[ ../../examples/pandoc-flavored-markdown/tables/alignment-of-multiline-tables.md ]]
+```
+
+::: rendered
+![[ ../../examples/pandoc-flavored-markdown/tables/alignment-of-multiline-tables.md ]]
+:::
+
+**单元格内换行**
+
+```markdown
+![[ ../../examples/pandoc-flavored-markdown/tables/line-break-multiline-tables.md ]]
+```
+
+::: rendered
+![[ ../../examples/pandoc-flavored-markdown/tables/line-break-multiline-tables.md ]]
+:::
 
 **3. Grid table（网格表格，`grid_tables`）**
 
@@ -189,6 +228,26 @@ Pandoc 同样可以识别 Emacs `orgtbl‑mode` 输出的管道表格，允许�
 - 复杂学术表格、带列表/代码、需要合并单元格的表（\LaTeX 论文首选）
 - 复杂的表格结构、需要合并单元格或在单元格内部嵌套复杂 Markdown 元素（如列表、引用块、甚至是代码块）的高级排版。
 
+**单元格对齐**
+
+```markdown
+![[ ../../examples/pandoc-flavored-markdown/tables/alignment-of-grid-tables.md ]]
+```
+
+::: rendered
+![[ ../../examples/pandoc-flavored-markdown/tables/alignment-of-grid-tables.md ]]
+:::
+
+**单元格内换行**
+
+```markdown
+![[ ../../examples/pandoc-flavored-markdown/tables/line-break-grid-tables.md ]]
+```
+
+::: rendered
+![[ ../../examples/pandoc-flavored-markdown/tables/line-break-grid-tables.md ]]
+:::
+
 **4. Pipe table（管道表格，`pipe_tables`，GitHub Flavor Markdown 兼容）**
 
 **特点**
@@ -208,14 +267,15 @@ Pandoc 同样可以识别 Emacs `orgtbl‑mode` 输出的管道表格，允许�
 - 快速写表、兼顾 GFM 兼容、日常文档
 - 小型、单行、结构简单的表格。
 
-| 属性 | Simple | Multiline | Grid | Pipe |
-|---|---|---|---|---|
-| 是否需要等宽对齐 | Yes | Yes | Yes | No |
-| 单元格内换行 | No | Yes | Yes | No |
-| 块元素（列表/代码） | No | No | Yes | No |
-| 单元格合并 | No | No | Yes | No |
-| 表头能否省略 | Yes | Yes | Yes | No（可空表头） |
-: `simple_tables` / `multiline_tables` / `grid_tables` / `pipe_tables` 对比汇总 {.striped}
+**单元格对齐**
+
+```markdown
+![[ ../../examples/pandoc-flavored-markdown/tables/alignment-of-pipe-tables.md ]]
+```
+
+::: rendered
+![[ ../../examples/pandoc-flavored-markdown/tables/alignment-of-pipe-tables.md ]]
+:::
 
 #### Caveats
 

@@ -215,7 +215,7 @@ Command line                        Default file
 
 `cite-method` 可以是 `citeproc`、`natbib` 或 `biblatex`。这仅影响 \LaTeX 输出。如果要使用 `citeproc` 格式化引文，还应设置 `citeproc: true`。
 
-如果需要控制 `citeproc` 处理与其他过滤器的相对顺序，应在过滤器列表中使用 `citeproc（参见`*[阅读器选项 Reader Options]*）。
+如果需要控制 `citeproc` 处理与其他过滤器的相对顺序，应在过滤器列表中使用 `citeproc`（参见*[阅读器选项 Reader Options]*）。
 
 ### HTML 中的数学渲染
 

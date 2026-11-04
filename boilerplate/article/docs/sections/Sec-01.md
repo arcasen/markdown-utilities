@@ -1,7 +1,8 @@
 ## 介绍
 
-这是第一节，[中文]{.index .mark term=Chinese@中文} [alpha]{.underline .index}
- [~~printf~~]{.index} [编程语言]{.index term=z_bianchengyuyan@编程语言}[示例]{.index term=s-shili@示例}
+这是第一节，[中文]{.index .mark} 
+ [~~beta~~]{.index}
+  [alpha]{.underline .index} [编程语言]{.index}[示例]{.index}
 
 1. [Python]{.mark .index term="Python!hello world"} 语言
    
@@ -9,7 +10,7 @@
    ![[ ../../examples/helloworld.py ]]
    ```
 
-   运行结果：
+   运行结果（[Python]{.index term="Python!你好，世界"}：
    ```text
    ![[ ../../examples/helloworld.py.txt ]]
    ```
