@@ -38,6 +38,11 @@ $endif$
 
 \usepackage{adjustbox}
 
+$if(makeindex)$
+\usepackage{makeidx}
+\makeindex
+$endif$
+
 % ---------------------- language -------------------------
 \makeatletter
 $if(lang)$
@@ -209,6 +214,24 @@ $if(biblatex)$
 \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
 
 $endif$
+
+$if(makeindex)$
+% 索引部分
+\cleardoublepage
+\phantomsection
+$if(toc)$
+\makeatletter
+% 如果是 book/report 用 chapter，如果是 article 用 section
+\@ifclassloaded{book}{
+  \addcontentsline{toc}{chapter}{索引} 
+}{
+  \addcontentsline{toc}{section}{索引}
+}
+\makeatother
+$endif$
+\printindex
+$endif$
+
 $for(include-after)$
 $include-after$
 

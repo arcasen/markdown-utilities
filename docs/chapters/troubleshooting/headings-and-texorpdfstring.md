@@ -61,7 +61,7 @@
 
 Pandoc 在解析 Markdown 标题中的 `\LaTeX` 时，确实会自动把它打包进 `\texorpdfstring`。
 
-Pandoc 在把你写的 Markdown 转换成 LaTeX 时，并不是简单的“查找与替换”，而是经历了一个**拆解再重组**的过程：
+Pandoc 在把你写的 Markdown 转换成 \LaTeX 时，并不是简单的“查找与替换”，而是经历了一个**拆解再重组**的过程：
 
 **第一步：读取并理解（构建 AST）**
 

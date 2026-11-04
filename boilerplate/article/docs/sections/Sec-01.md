@@ -1,20 +1,27 @@
-## 介绍 \LaTeX
+## 介绍
 
-这是第一节
+这是第一节，[中文]{.index .mark term=Chinese@中文} [alpha]{.underline .index}
+ [~~printf~~]{.index} [编程语言]{.index term=z_bianchengyuyan@编程语言}[示例]{.index term=s-shili@示例}
 
-1. C 语言
+1. [Python]{.mark .index term="Python!hello world"} 语言
    
-   头文件：
-
-   ```c
-   ![[ ../../examples/helloworld.c:1 ]]
+   ```python
+   ![[ ../../examples/helloworld.py ]]
    ```
 
-   `main` 函数：
-   
-   ```c
-   ![[ ../../examples/helloworld.c:3- ]]
+   运行结果：
+   ```text
+   ![[ ../../examples/helloworld.py.txt ]]
    ```
 
-2. JavaScript
+2. [JavaScript]{.underline .index tern=JavaScript}
+
+   ```java
+   ![[ ../../examples/helloworld.js ]]
+   ```
+
+   运行结果：
+   ```text
+   ![[ ../../examples/helloworld.js.txt ]]
+   ```
    

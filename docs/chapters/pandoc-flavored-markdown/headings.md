@@ -120,7 +120,7 @@ See the section on
 # My heading {.unnumbered}
 ```
 
-如果存在 `unnumbered` 和 `unlisted` ，则标题将不会包含在目录中。（目前此功能仅适用于某些格式：基于 LaTeX 和 HTML、PowerPoint 和 RTF 的格式。）
+如果存在 `unnumbered` 和 `unlisted` ，则标题将不会包含在目录中。（目前此功能仅适用于某些格式：基于 \LaTeX 和 HTML、PowerPoint 和 RTF 的格式。）
 
 ::: caution
 

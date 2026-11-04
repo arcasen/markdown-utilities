@@ -17,3 +17,5 @@
 ![[ ./filters/text-color-plus.md ]]
 
 ![[ ./filters/rotate-image.md ]]
+
+![[ ./filters/makeindex.md ]]

@@ -23,6 +23,8 @@ lang: zh
 
 ![[ chapters/math.md ]]
 
+![[ chapters/quantities-and-units.md ]]
+
 ![[ chapters/cross-referencing.md ]]
 
 ![[ chapters/citations.md ]]

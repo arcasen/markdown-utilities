@@ -189,7 +189,7 @@ header-includes:
 
 ```
 
-**原理**：`defaultdialect=[LaTeX]TeX` 会强制让所有的 \TeX 代码块默认使用 LaTeX 方言。
+**原理**：`defaultdialect=[LaTeX]TeX` 会强制让所有的 \TeX 代码块默认使用 \LaTeX 方言。
 
 2. **方案二：使用 Pandoc 过滤器**
 

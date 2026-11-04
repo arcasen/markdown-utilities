@@ -1,5 +1,6 @@
 documentclass: ctexbook
 classoption: a4paper,12pt
+makeindex: true
 # classoption:
 #   - a4paper
 #   - 12pt

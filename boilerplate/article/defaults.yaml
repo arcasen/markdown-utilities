@@ -16,6 +16,7 @@ filters:
   - pandoc-crossref
   - citeproc
   - pageref
+  - makeindex
   # - hypertext-reference
 
 # Resolve '! LaTeX Error: Environment lstlisting unenabled.' when

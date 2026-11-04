@@ -41,7 +41,7 @@ Pandoc 默认是启用该扩展的，如果要想将单词内部的 `_` 解析�
 
 ::: caution
 
-在转化为 LaTeX/PDF 时，unline 类会转化成 `\st{...}`（`soul` 宏包命令）， 对于中文是不起作用的。 在 Stenciler 模板中，使用了 `CJKfntef` 宏包的 `CJKsout` 命令重新定义。
+在转化为 \LaTeX/PDF 时，unline 类会转化成 `\st{...}`（`soul` 宏包命令）， 对于中文是不起作用的。 在 Stenciler 模板中，使用了 `CJKfntef` 宏包的 `CJKsout` 命令重新定义。
 
 :::
 
