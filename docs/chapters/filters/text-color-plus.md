@@ -1,6 +1,6 @@
-### 支持 docx、HTML 和 PDF 格式输出
+### 过滤器实例：设置文字颜色（增加支持 docx 格式输出）
 
-以下是支持 docx、HTML 和 PDF 输出的完整过滤器，能够处理以 `#` 开头的十六进制颜色代码：
+以下是支持 docx、HTML 和 \LaTeX 输出的完整过滤器，能够处理以 `#` 开头的十六进制颜色代码：
 
 ```{.python .numberLines}
 ![[ ../../examples/filters/text-color-plus ]]

@@ -129,7 +129,7 @@ Pandoc 同样可以识别 Emacs `orgtbl‑mode` 输出的管道表格，允许�
 ![[ ../../examples/pandoc-flavored-markdown/tables/pipe-tables.md ]]
 :::
 
-#### `simple_tables` / `multiline_tables` / `grid_tables` / `pipe_tables` 对比
+#### 单元格对齐与跨行
 
 核心分界：**简单表格、多行表格和网格表格依赖等宽字体、必须手工对齐列；管道表格不需要列对齐，兼容比例字体。**
 
@@ -222,6 +222,7 @@ Pandoc 同样可以识别 Emacs `orgtbl‑mode` 输出的管道表格，允许�
 **局限**
 
 - 语法繁琐，书写成本最高，对字符对齐的精度要求极高（通常需要配合工具或编辑器插件来生成）。
+- 中文按 2 格字符，每行都需要对齐，如果错位，将导致表格解析失败。
 
 **适用**
 

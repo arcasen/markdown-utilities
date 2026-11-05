@@ -1,4 +1,4 @@
-### 创建索引
+### 过滤器实例：创建索引
 
 Pandoc 原生没有一键生成「术语索引（Index，按术语 + 页码的书末索引）」的能力；但原生支持目录 TOC、表格清单 LOT、图清单 LOF。
 
@@ -6,14 +6,7 @@ Pandoc 原生没有一键生成「术语索引（Index，按术语 + 页码的�
 
 Pandoc markdown 支持 `[文本]{.cls1 .cls2}` 的写法，空格分隔多个 class（见*[扩展：`bracketed_spans`]*）。属性块里可以同时放：ID、多个 class、多个 key-value 属性，多个 class 也支持逗号分隔：`{.cls1,.cls2}`，空格更常用。
 
-可以通过下面的过滤器实现对形如 `[文本]{.index}` 的文本进行处理，并在 \TeX 文件中生成 `\index{文本}`，同时在 stenciler 模板加入了对索引的支持。
-
-::: important
-需要注意的是：
-
-- `.mark`：手动接管，输出 `\hl{内容}\index{term}`，保留内部富格式
-- `.underline` / `.smallcaps` 等：保留 Span，追加\`index`，原生逻辑生效
-:::
+可以通过下面的过滤器实现对形如 `[文本]{.index}` 的文本进行处理，并在 \TeX 文件中生成 `\index{文本}`，同时在 Stenciler 模板加入了对索引的支持。
 
 ```python
 #!/usr/bin/env python3
@@ -46,6 +39,49 @@ def action(elem, doc):
 
 if __name__ == "__main__":
     pf.run_filter(action, doc=None)
+```
+
+需要注意的是：
+
+- `.mark`：手动接管，输出 `\hl{内容}\index{term}`，保留内部富格式
+- `.underline` / `.smallcaps` 等：保留 Span，追加\`index`，原生逻辑生效
+
+这是因为 Pandoc 对这些属性的解析是不同的：`.underline` 和 `.smallcaps` 生成特殊的 Underline 和 Smallcaps 节点，而 `.mark` 不会，所以必须在该过滤器中进行处理，否则会被丢弃。
+
+**`.underline`**
+
+```markdown
+![[ ../../examples/filters/ast/underline.md]]
+```
+
+解析输出：
+
+```haskell
+![[ ../../examples/filters/ast/underline.hs]]
+```
+
+**`.smallcaps`**
+
+```markdown
+![[ ../../examples/filters/ast/smallcaps.md]]
+```
+
+解析输出：
+
+```haskell
+![[ ../../examples/filters/ast/smallcaps.hs]]
+```
+
+**`.mark`**
+
+```markdown
+![[ ../../examples/filters/ast/mark.md]]
+```
+
+解析输出：
+
+```haskell
+![[ ../../examples/filters/ast/mark.hs]]
 ```
 
 | Markdown 写法 | 输出 \LaTeX |

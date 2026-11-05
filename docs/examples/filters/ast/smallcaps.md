@@ -1,0 +1,1 @@
+[hello world]{.smallcaps .index}
