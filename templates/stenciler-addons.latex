@@ -51,4 +51,31 @@
 
 % 设置让 quote 环境开始时自动应用斜体 (\itshape)
 \AtBeginEnvironment{quote}{\itshape}
+
+% `10000` = 绝对不允许把单条脚注拆开；
+% 空间不够时，LaTeX 会把**带脚注标记的那一行正文整体推到下一页**，本页下方留空白；
+% 经常伴随 `Underfull \vbox` 警告，搭配 `\raggedbottom` 可以消掉这个警告
+\interfootnotelinepenalty=10000%`\interfootnotelinepenalty` 默认值是 `100`
+\raggedbottom
+
+% 全局重定义 \cleardoublepage，所有自动空白页都灰色 
+% This page is intentionally left blank
+\makeatletter
+\renewcommand{\cleardoublepage}{
+  \clearpage
+  \if@twoside
+    \ifodd\c@page
+    \else
+      \newpage
+      \thispagestyle{empty}
+      \vspace*{\fill}
+      \begin{center}
+        \Large \color{gray!75} This page is intentionally left blank
+      \end{center}
+      \vspace*{\fill}
+      \newpage
+    \fi
+  \fi
+}
+\makeatother
 % ---------------------------------------------------------
