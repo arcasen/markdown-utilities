@@ -111,4 +111,9 @@
 \newenvironment{rcase}
   {\left.\begin{aligned}}
   {\end{aligned}\right\rbrace}
+
+% 让公式编号根据 section 自动带上章节号 (如 1.1, 2.1)
+\numberwithin{equation}{section}
+% 让公式编号根据 chapter 自动带上章节号 (如 1.1, 2.1)
+%\numberwithin{equation}{chapter}
 % ---------------------------------------------------------

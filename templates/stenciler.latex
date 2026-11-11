@@ -55,6 +55,7 @@ $endif$
 
 $stenciler-addons.latex()$
 
+
 $-- % add backlinks to footnote references, 
 $-- % cf. https://tex.stackexchange.com/questions/302266/make-footnote-clickable-both-ways
 $-- % Hyperref + footnotebackref fails in longtable, 

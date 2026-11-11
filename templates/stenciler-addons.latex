@@ -59,7 +59,7 @@
 \raggedbottom
 
 % 全局重定义 \cleardoublepage，所有自动空白页都灰色 
-% This page is intentionally left blank
+% This page intentionally left blank
 \makeatletter
 \renewcommand{\cleardoublepage}{
   \clearpage
@@ -70,7 +70,7 @@
       \thispagestyle{empty}
       \vspace*{\fill}
       \begin{center}
-        \Large \color{gray!75} This page is intentionally left blank
+        \textcolor{gray!75}{\Large This page intentionally left blank}
       \end{center}
       \vspace*{\fill}
       \newpage

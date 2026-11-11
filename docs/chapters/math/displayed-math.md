@@ -3,10 +3,9 @@
 ```markdown
 ![[ ../../examples/math/quadratic-equation.md ]]
 ```
+
 ::: rendered
-
 ![[ ../../examples/math/quadratic-equation.md ]]
-
 :::
 
 ::: important
